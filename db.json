@@ -1,0 +1,68 @@
+{"federal" : [
+	{
+		"id" : 1,
+		"name": "Mike Pence",
+		"address": [{
+			"line1": "The White House",
+			"line2": "1600 Pennsylvania Avenue NW",
+			"line3": "",
+			"city": "Washington",
+			"state": "DC",
+			"zip": "20500"
+		}],
+		"party": "Republican Party",
+		"phones": [
+			"(202) 456-1111"
+		],
+		"urls": [
+			"http://www.whitehouse.gov/"
+		],
+		"photoUrl": "https://www.whitehouse.gov/sites/whitehouse.gov/files/images/45/VPE%20Color.jpg",
+		"channels": [{
+				"type": "Facebook",
+				"id": "mikepence"
+			},
+			{
+				"type": "Twitter",
+				"id": "VP"
+			}
+		]
+	}],
+	"local": [{
+		"id" : 1,
+		"name": "Andrew M. Cuomo",
+		"address": [
+		 {
+			"line1": "The Honorable Andrew M. Cuomo",
+			"line2": "Governor of New York State",
+			"line3": "NYS State Capitol Building",
+			"city": "Albany",
+			"state": "NY",
+			"zip": "12224"
+		 }
+		],
+		"party": "Democratic Party",
+		"phones": [
+		 "(518) 474-8390"
+		],
+		"urls": [
+		 "https://andrewcuomo.com/"
+		],
+		"channels": [
+		 {
+			"type": "Facebook",
+			"id": "GovernorAndrewCuomo"
+		 },
+		 {
+			"type": "Twitter",
+			"id": "nygovcuomo"
+		 },
+		 {
+			"type": "YouTube",
+			"id": "nygovcuomo"
+		 }
+		]
+	 }
+]}
+
+
