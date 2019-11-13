@@ -1,0 +1,165 @@
+<div class="col-md-4">
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h3 class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</h3>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="btn-group">
+        </div>
+        <small class="text-muted">9 mins</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<a class="navbar-brand" href="#">Vote Smart</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarNavDropdown">
+  <ul class="navbar-nav">
+    <li class="nav-item active">
+      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Political Issues</a>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        My Representatives
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="#">Federal</a>
+        <a class="dropdown-item" href="#">Local</a>
+        <a class="dropdown-item" href="#">Elections</a>
+        <a class="dropdown-item" href="#">Bills</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+
+
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<header>
+<div class="collapse bg-dark" id="navbarHeader">
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8 col-md-7 py-4">
+      <h4 class="text-white">About</h4>
+      <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+    </div>
+    <div class="col-sm-4 offset-md-1 py-4">
+      <h4 class="text-white">Contact</h4>
+      <ul class="list-unstyled">
+        <li><a href="#" class="text-white">Follow on Twitter</a></li>
+        <li><a href="#" class="text-white">Like on Facebook</a></li>
+        <li><a href="#" class="text-white">Email me</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<a class="navbar-brand" href="#">Vote Smart</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarNavDropdown">
+<ul class="navbar-nav">
+  <li class="nav-item active">
+    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Political Issues</a>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      My Representatives
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+      <a class="dropdown-item" href="#">Federal</a>
+      <a class="dropdown-item" href="#">Local</a>
+      <a class="dropdown-item" href="#">Elections</a>
+      <a class="dropdown-item" href="#">Bills</a>
+    </div>
+  </li>
+</ul>
+</div>
+</nav>
+
+</header>
+
+<main role="main">
+
+<section class="jumbotron text-center">
+  <div class="container">
+    <h1 class="jumbotron-heading">Album example</h1>
+    <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+    <p>
+      <a href="#" class="btn btn-primary my-2">Main call to action</a>
+      <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+    </p>
+  </div>
+</section>
+
+<div class="album py-5 bg-light">
+  <div class="container">
+
+    <div class="row-card">
+    </div>
+  </div>
+</div>
+</main> -->
+<!-- BREAK -->
+
+
+// card.innerHTML =
+// <!-- <div class="card mb-4 shadow-sm"> -->
+//   <!-- <div class="card-body"> -->
+//     <!-- <img class="container" src="${member.photoUrl}"> -->
+//       <!-- <h4 class="card-office">${member.title}</h4> -->
+//       <!-- <h5 class="card-name">${member.name}</h5> -->
+//       <!-- <div class="d-flex justify-content-between align-items-center"> -->
+//         <!-- <div class="btn-group">
+//           <button data-id=${member.channels[1].id} type='button' class='btn btn-sm btn-outline-secondary' data-toggle='modal' data-target='#exampleModal'>
+//             View Representative
+//           </button> -->
+//         <!-- </div> -->
+//         <!-- <i class="fa fa-twitter" style="font-size:20px"></i>
+//         <i class="fa fa-facebook" style="font-size:20px"></i>
+//         <small class="text-muted"></small>
+//       </div> -->
+//     <!-- </div> -->
+//   <!-- </div> -->
