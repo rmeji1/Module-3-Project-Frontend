@@ -1,9 +1,11 @@
 const columnDiv = document.querySelector('#main-row')
 const addressForm = document.querySelector('#address-form')
 
-addressForm.addEventListener('submit', function (event) {
+addressForm.addEventListener('submit', submitForm)
+
+function submitForm (event) {
   event.preventDefault()
-  const addressValue = event.target.inlineFormAddress.value
+  // const addressValue = event.target.inlineFormAddress.value
   const username = event.target.inlineFormInputGroupUsername.value
   fetch('http://localhost:3000/users', { //eslint-disable-line
     method: 'POST',
@@ -13,16 +15,21 @@ addressForm.addEventListener('submit', function (event) {
     },
     body: JSON.stringify({
       user: {
-        username: username,
-        address: addressValue
+        username: username
+        // address: addressValue
       }
     })
   })
     .then((r) => r.json())
     .then((user) => {
-      fetchFederal(user)
+      if (user.address === null) {
+        updateForm(user)
+      } else {
+        columnDiv.innerHTML = ''
+        fetchFederal(user)
+      }
     })
-})
+}
 
 function fetchFederal (user) {
   fetch(`http://localhost:3000/users/${user.id}?federal=true`) //eslint-disable-line
@@ -32,6 +39,51 @@ function fetchFederal (user) {
       federal.forEach(function (member) {
         renderMember(member)
       })
+    })
+}
+
+function updateForm (user) {
+  addressForm.innerHTML = ''
+  alert('Please enter your address') // eslint-disable-line
+  const formRow = createAndAppendElement('div', addressForm, null, 'form-row')
+  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-5 my-1')
+  createAndAppendElement('label', smallCol, null, 'sr-only', (element) => {
+    element.setAttribute('for', 'inlineFormAddress')
+    element.innerText = 'Address'
+  })
+  createAndAppendElement('input', smallCol, 'inlineFormAddress', 'form-control', (element) => {
+    element.dataset.id = user.id
+    element.placeholder = 'Address'
+  })
+  const buttonCol = createAndAppendElement('div', formRow, null, 'col-sm-3 my-1')
+  createAndAppendElement('button', buttonCol, null, 'btn btn-primary', (element) => {
+    element.innerText = 'Add Address'
+  })
+  addressForm.removeEventListener('submit', submitForm)
+  addressForm.addEventListener('submit', updateFormEventListener)
+}
+
+function updateFormEventListener (event) {
+  event.preventDefault()
+  const id = event.target.inlineFormAddress.dataset.id
+  const address = event.target.inlineFormAddress.value
+  fetch(`http://localhost:3000/users/${id}`, { //eslint-disable-line
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json',
+      accept: 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    },
+    body: JSON.stringify({
+      user: {
+        address: address
+      }
+    })
+  })
+    .then((response) => response.json())
+    .then(userObj => {
+      columnDiv.innerHTML = ''
+      fetchFederal(userObj)
     })
 }
 
