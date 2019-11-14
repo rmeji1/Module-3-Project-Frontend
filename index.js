@@ -74,7 +74,7 @@ function renderMember (member, row) {
   const cardShadow = createAndAppendElement('div', card, null, 'card mb-4 shadow-sm animated bounceInRight faster')
   const cardBody = createAndAppendElement('div', cardShadow, null, 'card-body')
   createAndAppendElement('img', cardBody, null, 'container', (element) => {
-    element.height = 350
+    element.height = 400
     if (member.photoUrl === undefined) {
       element.src = 'https://i.imgur.com/zucVdwH.png'
     } else {
