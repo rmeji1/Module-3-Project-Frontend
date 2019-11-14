@@ -92,6 +92,7 @@ function renderMember (member, row) {
   createAndAppendElement('div', buttonDiv, `btn-group-${member.name.replace(/[." "]/g, '-')}`, 'btn-group')
   row.append(card)
   makeButton(member)
+  // debugger;
   if (member.proPublica_id !== undefined) {
     card.id = `card-${member.proPublica_id}`
     makeButtonForBills(member)
@@ -103,6 +104,10 @@ function updateForm (user) {
   alert('Please enter your address') // eslint-disable-line
   const formRow = createAndAppendElement('div', addressForm, null, 'form-row')
   const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-5 my-1')
+  formAddressComponents(smallCol, user, formRow)
+}
+
+function formAddressComponents (smallCol, user, formRow) {
   createAndAppendElement('label', smallCol, null, 'sr-only', (element) => {
     element.setAttribute('for', 'inlineFormAddress')
     element.innerText = 'Address'
@@ -123,7 +128,14 @@ function updateFormEventListener (event) {
   event.preventDefault()
   const id = event.target.inlineFormAddress.dataset.id
   const address = event.target.inlineFormAddress.value
-  fetch(`http://localhost:3000/users/${id}`, { //eslint-disable-line
+  patchAddress(id, address).then(userObj => {
+    columnDiv.innerHTML = ''
+    fetchRep(userObj.id, true)
+  })
+}
+
+function patchAddress (id, address) {
+  return fetch(`http://localhost:3000/users/${id}`, { //eslint-disable-line
     method: 'PATCH',
     headers: {
       'content-type': 'application/json',
@@ -137,23 +149,17 @@ function updateFormEventListener (event) {
     })
   })
     .then((response) => response.json())
-    .then(userObj => {
-      columnDiv.innerHTML = ''
-      fetchRep(userObj.id, true)
-    })
 }
 
 function makeButton (member) {
   const buttonDiv = document.querySelector(`#btn-group-${member.name.replace(/[." "]/g, '-')}`)
-  const viewButton = document.createElement('button')
-  viewButton.innerText = 'View Representative'
-  viewButton.className = 'btn btn-sm btn-outline-secondary'
-  viewButton.setAttribute('data-toggle', 'modal')
-  viewButton.setAttribute('data-target', '.bd-example-modal-xl')
-  viewButton.dataset.id = member.id
-  buttonDiv.append(viewButton)
-  viewButton.addEventListener('click', () => {
-    representativeModalElements(member)
+  createAndAppendElement('button', buttonDiv, null, 'btn btn-sm btn-outline-secondary', (element) => {
+    element.innerText = 'View Representative'
+    element.className = 'btn btn-sm btn-outline-secondary'
+    element.setAttribute('data-toggle', 'modal')
+    element.setAttribute('data-target', '.bd-example-modal-xl')
+    element.dataset.id = member.id
+    element.addEventListener('click', () => { representativeModalElements(member) })
   })
 }
 
@@ -201,13 +207,12 @@ function wantToSeeActiveBills (event) {
   row.append(cardLeft)
   button.removeEventListener('click', wantToSeeActiveBills)
   button.addEventListener('click', wantFederalReps)
+  getBillsFor(button).then((bills) => { appendBillsToDOM(bills, row) })
+}
 
-  fetch(`http://localhost:3000/representatives/${button.dataset.proPublica_id}`) //eslint-disable-line
+function getBillsFor (button) {
+  return fetch(`http://localhost:3000/representatives/${button.dataset.proPublica_id}`) //eslint-disable-line
     .then(response => response.json())
-    .then((bills) => {
-      appendBillsToDOM(bills, row)
-      console.log(bills)
-    })
 }
 
 function wantFederalReps (event) {
@@ -224,14 +229,28 @@ function appendBillsToDOM (bills, row) {
     appendBillToDom(bill, col)
   }
 }
+
 function appendBillToDom (bill, col) {
-  const card = createAndAppendElement('div', col, null, 'card flex-fill mb-4')
+  const card = createAndAppendElement('div', col, `card-${bill.bill_id}`, 'card flex-fill mb-4')
+  createCardBody(card, bill)
+}
+
+function createCardBody (card, bill) {
   createAndAppendElement('div', card, null, 'card-header', (el) => { el.innerText = bill.short_title })
-  const cardBody = createAndAppendElement('div', card, null, 'card-body d-flex flex-column')
+  const cardBody = createAndAppendElement('div', card, `card-body-${bill.bill_id}`, 'card-body d-flex flex-column')
   createAndAppendElement('i', cardBody, null, 'text-muted align-self-end', (el) => { el.innerText = `Introduced on: ${bill.introduced_date}` })
   createAndAppendElement('div', cardBody, null, 'mt-2 mb-4', (el) => {
     el.innerText = bill.title
   })
+  insertBillButtons(card, bill, cardBody)
+  // cardBody.innerHTML += `
+  // <div class="progress">
+  //   <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">50%</div>
+  //   <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">50%</div>
+  // </div>`
+}
+
+function insertBillButtons (card, bill, cardBody) {
   if (bill.userforBill !== undefined) {
     createAndAppendElement('em', cardBody, null, 'text-muted align-self-end', (el) => {
       el.innerText = bill.userforBill ? 'You support this!' : 'You do not support this bill!'
@@ -240,16 +259,18 @@ function appendBillToDom (bill, col) {
   } else {
     addAgreeButtons(card, bill)
   }
-  cardBody.innerHTML += `
-  <div class="progress">
-    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">50%</div>
-    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">50%</div>
-  </div>`
 }
+
 function addAgreeButtons (card, bill) {
-  const footer = createAndAppendElement('div', card, null, 'card-footer')
+  const footer = createAndAppendElement('div', card, `card-footer-${bill.bill_id}`, 'card-footer')
   const footerRow = createAndAppendElement('div', footer, null, 'row w-100')
   const agreeCol = createAndAppendElement('div', footerRow, null, 'col-6')
+  agreeButton(agreeCol, bill)
+  const disagreeCol = createAndAppendElement('div', footerRow, null, 'col-6')
+  disagreeButton(disagreeCol, bill)
+}
+
+function agreeButton (agreeCol, bill) {
   createAndAppendElement('div', agreeCol, 'btn-vote-for', 'btn btn-success btn-lg btn-block', (el) => {
     el.innerText = 'Agree'
     el.dataset.vote = 'true'
@@ -257,7 +278,9 @@ function addAgreeButtons (card, bill) {
     el.dataset.sponsorId = bill.sponsor_id
     el.addEventListener('click', voteForBill)
   })
-  const disagreeCol = createAndAppendElement('div', footerRow, null, 'col-6')
+}
+
+function disagreeButton (disagreeCol, bill) {
   createAndAppendElement('div', disagreeCol, 'btn-vote-against', 'btn btn-danger btn-lg btn-block', (el) => {
     el.innerText = 'Disagree'
     el.dataset.vote = 'false'
@@ -268,7 +291,7 @@ function addAgreeButtons (card, bill) {
 }
 
 function addRemoveVote (card, bill) {
-  const footer = createAndAppendElement('div', card, null, 'card-footer')
+  const footer = createAndAppendElement('div', card, `card-footer-${bill.bill_id}`, 'card-footer')
   const footerRow = createAndAppendElement('div', footer, null, 'row w-100 mx-auto')
   const disagreeCol = createAndAppendElement('div', footerRow, null, 'col-12')
   createAndAppendElement('div', disagreeCol, 'btn-vote-against', 'btn btn-danger btn-lg btn-block', (el) => {
@@ -283,7 +306,15 @@ function addRemoveVote (card, bill) {
 
 function voteForBill (event) {
   const userId = columnDiv.dataset.userId
-  fetch(`http://localhost:3000/bills`, { //eslint-disable-line
+  voteBillPOST(userId, event).then((bill) => {
+    const card = document.querySelector(`#card-${bill.bill_id}`)
+    card.innerHTML = ''
+    createCardBody(card, bill)
+  })
+}
+
+function voteBillPOST (userId, event) {
+  return fetch(`http://localhost:3000/bills`, { //eslint-disable-line
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -299,13 +330,6 @@ function voteForBill (event) {
     })
   })
     .then(response => response.json())
-    .then((voteObj) => {
-      console.log(voteObj)
-      document.querySelector('#btn-vote-against').disabled = true
-      document.querySelector('#btn-vote-for').disabled = true
-      document.querySelector('#btn-vote-against').removeEventListener('click', voteForBill)
-      document.querySelector('#btn-vote-for').removeEventListener('click', voteForBill)
-    })
 }
 
 function createAndAppendElement (tag, parent, id, className, callback) {
