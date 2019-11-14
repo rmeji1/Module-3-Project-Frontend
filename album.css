@@ -1,3 +1,6 @@
+html, body{
+  height: 100%;
+}
 .jumbotron {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -71,4 +74,12 @@ img {
   background-color: #00b894;
   border-color: #00b894;
   color: white;
+}
+
+.album{
+  height: 100%;
+}
+
+.container {
+  flex-direction: row;
 }

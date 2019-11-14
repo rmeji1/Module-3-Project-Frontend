@@ -7,7 +7,7 @@ addressForm.addEventListener('submit', submitForm)
 function submitForm (event) {
   event.preventDefault()
   // const addressValue = event.target.inlineFormAddress.value
-  const username = event.target.inlineFormInputGroupUsername.value
+  const username = event.target.inlineFormInputGroupUsername.value.toLowerCase()
   fetch('http://localhost:3000/users', { //eslint-disable-line
     method: 'POST',
     headers: {
@@ -74,6 +74,7 @@ function renderMember (member, row) {
   const cardShadow = createAndAppendElement('div', card, null, 'card mb-4 shadow-sm animated bounceInRight faster')
   const cardBody = createAndAppendElement('div', cardShadow, null, 'card-body')
   createAndAppendElement('img', cardBody, null, 'container', (element) => {
+    element.height = 350
     if (member.photoUrl === undefined) {
       element.src = 'https://i.imgur.com/zucVdwH.png'
     } else {
@@ -81,10 +82,11 @@ function renderMember (member, row) {
     }
   })
 
-  createAndAppendElement('h4', cardBody, null, 'card-office', (el) => {
+  createAndAppendElement('h5', cardBody, null, 'card-office', (el) => {
+    el.style = 'white-space: nowrap; overflow:hidden;'
     el.innerText = member.title
   })
-  createAndAppendElement('h5', cardBody, null, 'card-name', (el) => {
+  createAndAppendElement('h6', cardBody, null, 'card-name', (el) => {
     el.innerText = member.name
   })
   const buttonDiv = createAndAppendElement('div', cardBody, null, 'd-flex justify-content-between align-items-center')
@@ -104,7 +106,7 @@ function updateForm (user) {
   addressForm.innerHTML = ''
   alert('Please enter your address') // eslint-disable-line
   const formRow = createAndAppendElement('div', addressForm, null, 'form-row')
-  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-5 my-1')
+  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-9 my-1')
   formAddressComponents(smallCol, user, formRow)
 }
 
@@ -155,7 +157,7 @@ function patchAddress (id, address) {
 function makeButton (member) {
   const buttonDiv = document.querySelector(`#btn-group-${member.name.replace(/[." "]/g, '-')}`)
   createAndAppendElement('button', buttonDiv, null, 'btn btn-sm btn-outline-secondary', (element) => {
-    element.innerText = 'View Representative'
+    element.innerText = 'Details'
     element.className = 'btn btn-sm btn-outline-secondary'
     element.setAttribute('data-toggle', 'modal')
     element.setAttribute('data-target', '.bd-example-modal-xl')
@@ -297,14 +299,36 @@ function addRemoveVote (card, bill) {
   const footer = createAndAppendElement('div', card, `card-footer-${bill.bill_id}`, 'card-footer')
   const footerRow = createAndAppendElement('div', footer, null, 'row w-100 mx-auto')
   const disagreeCol = createAndAppendElement('div', footerRow, null, 'col-12')
-  createAndAppendElement('div', disagreeCol, 'btn-vote-against', 'btn btn-danger btn-lg btn-block', (el) => {
+  createAndAppendElement('div', disagreeCol, 'btn-remove-vote', 'btn btn-danger btn-lg btn-block', (el) => {
     el.innerText = 'Remove my vote'
     el.dataset.vote = 'false'
     el.dataset.billId = bill.bill_id
     el.dataset.sponsorId = bill.sponsor_id
     console.log('need to add event lisenter for this!')
+    el.addEventListener('click', removeMyVoteEvent)
     // el.addEventListener('click', voteForBill)
   })
+}
+
+function removeMyVoteEvent (event) {
+  console.log('remove event button pressed.')
+  fetch(`http://localhost:3000/bills/voted/${event.target.dataset.billId}`, { //eslint-disable-line
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify({
+      user_id: columnDiv.dataset.userId
+    })
+  })
+    .then((r) => r.json())
+    .then(bill => {
+      console.log(bill);
+      const card = document.querySelector(`#card-${bill.bill_id}`)
+      card.innerHTML = ''
+      createCardBody(card, bill)
+    })
 }
 
 function voteForBill (event) {
