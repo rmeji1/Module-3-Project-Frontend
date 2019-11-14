@@ -63,6 +63,7 @@ function fetchRep (id, federal) {
           row = createAndAppendElement('div', columnDiv, null, 'row w-100 mx-auto')
         }
       }
+      window.scrollTo(0, document.querySelector('.jumbotron').clientHeight)
     })
 }
 
