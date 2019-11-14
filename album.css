@@ -60,3 +60,15 @@ img {
   border-color: #f8e9a1;
   color: #24305e;
 }
+
+.btn-danger{
+  background-color: #f76c6c;
+  border-color: #f76c6c;
+  color: white;
+}
+
+.btn-success{
+  background-color: #00b894;
+  border-color: #00b894;
+  color: white;
+}

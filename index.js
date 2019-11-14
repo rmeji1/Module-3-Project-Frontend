@@ -70,7 +70,7 @@ function renderMember (member, row) {
   const card = document.createElement('div')
   card.className = 'col-md-4'
 
-  const cardShadow = createAndAppendElement('div', card, null, 'card mb-4 shadow-sm animated bounceInRight fast')
+  const cardShadow = createAndAppendElement('div', card, null, 'card mb-4 shadow-sm animated bounceInRight faster')
   const cardBody = createAndAppendElement('div', cardShadow, null, 'card-body')
   createAndAppendElement('img', cardBody, null, 'container', (element) => {
     if (member.photoUrl === undefined) {
@@ -198,7 +198,6 @@ function makeButtonForBills (member) {
 }
 
 function wantToSeeActiveBills (event) {
-  console.log('wants to see bill')
   const button = event.target
   button.innerText = 'Back'
   const cardLeft = document.querySelector(`#card-${event.target.dataset.proPublica_id}`)
@@ -207,7 +206,10 @@ function wantToSeeActiveBills (event) {
   row.append(cardLeft)
   button.removeEventListener('click', wantToSeeActiveBills)
   button.addEventListener('click', wantFederalReps)
-  getBillsFor(button).then((bills) => { appendBillsToDOM(bills, row) })
+  getBillsFor(button).then((bills) => {
+    appendBillsToDOM(bills, row)
+    window.scrollTo(0, document.querySelector('.jumbotron').clientHeight)
+  })
 }
 
 function getBillsFor (button) {
@@ -224,7 +226,7 @@ function wantFederalReps (event) {
 }
 
 function appendBillsToDOM (bills, row) {
-  const col = createAndAppendElement('div', row, null, 'col-sm-8 d-flex flex-column wrapper')
+  const col = createAndAppendElement('div', row, null, 'col-sm-8 d-flex flex-column wrapper animated bounceInUp slow')
   for (const bill of bills) {
     appendBillToDom(bill, col)
   }
