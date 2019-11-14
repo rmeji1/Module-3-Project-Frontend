@@ -42,7 +42,7 @@ function showMyVotesEvent (event) {
     .then((bills) => {
       while (columnDiv.firstChild) columnDiv.removeChild(columnDiv.firstChild)
       const row = createAndAppendElement('div', columnDiv, null, 'row')
-      const col = createAndAppendElement('div', row, null, 'col-sm-8 d-flex flex-column wrapper')
+      const col = createAndAppendElement('div', row, null, 'col-sm-12 d-flex flex-column wrapper')
       for (const bill of bills) {
         appendBillToDom(bill, col)
       }
