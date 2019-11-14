@@ -52,3 +52,7 @@ img {
     transition-delay: 0s;
   }
 }
+
+.wrapper {
+  overflow-y:scroll;  
+}
