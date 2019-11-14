@@ -40,7 +40,12 @@ function showMyVotesEvent (event) {
   fetch(`${event.target.href}/${id}`) //eslint-disable-line
     .then(response => response.json())
     .then((bills) => {
-      console.log(bills)
+      while (columnDiv.firstChild) columnDiv.removeChild(columnDiv.firstChild)
+      const row = createAndAppendElement('div', columnDiv, null, 'row')
+      const col = createAndAppendElement('div', row, null, 'col-sm-8 d-flex flex-column wrapper')
+      for (const bill of bills) {
+        appendBillToDom(bill, col)
+      }
     })
 }
 
@@ -216,30 +221,31 @@ function wantFederalReps (event) {
 function appendBillsToDOM (bills, row) {
   const col = createAndAppendElement('div', row, null, 'col-sm-8 d-flex flex-column wrapper')
   for (const bill of bills) {
-    const card = createAndAppendElement('div', col, null, 'card flex-fill mb-4')
-    createAndAppendElement('div', card, null, 'card-header', (el) => { el.innerText = bill.short_title })
-    const cardBody = createAndAppendElement('div', card, null, 'card-body d-flex flex-column')
-    createAndAppendElement('i', cardBody, null, 'text-muted align-self-end', (el) => { el.innerText = `Introduced on: ${bill.introduced_date}` })
-    createAndAppendElement('div', cardBody, null, 'mt-2 mb-4', (el) => {
-      el.innerText = bill.title
-    })
-    if (bill.userforBill !== undefined) {
-      createAndAppendElement('em', cardBody, null, 'text-muted align-self-end', (el) => {
-        el.innerText = bill.userforBill ? 'You support this!' : 'You do not support this bill!'
-      })
-      addRemoveVote(card, bill)
-    } else {
-      addAgreeButtons(card, bill)
-    }
-    cardBody.innerHTML += `
-    <div class="progress">
-      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">50%</div>
-      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">50%</div>
-    </div>
-    `
+    appendBillToDom(bill, col)
   }
 }
-
+function appendBillToDom (bill, col) {
+  const card = createAndAppendElement('div', col, null, 'card flex-fill mb-4')
+  createAndAppendElement('div', card, null, 'card-header', (el) => { el.innerText = bill.short_title })
+  const cardBody = createAndAppendElement('div', card, null, 'card-body d-flex flex-column')
+  createAndAppendElement('i', cardBody, null, 'text-muted align-self-end', (el) => { el.innerText = `Introduced on: ${bill.introduced_date}` })
+  createAndAppendElement('div', cardBody, null, 'mt-2 mb-4', (el) => {
+    el.innerText = bill.title
+  })
+  if (bill.userforBill !== undefined) {
+    createAndAppendElement('em', cardBody, null, 'text-muted align-self-end', (el) => {
+      el.innerText = bill.userforBill ? 'You support this!' : 'You do not support this bill!'
+    })
+    addRemoveVote(card, bill)
+  } else {
+    addAgreeButtons(card, bill)
+  }
+  cardBody.innerHTML += `
+  <div class="progress">
+    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">50%</div>
+    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">50%</div>
+  </div>`
+}
 function addAgreeButtons (card, bill) {
   const footer = createAndAppendElement('div', card, null, 'card-footer')
   const footerRow = createAndAppendElement('div', footer, null, 'row w-100')
