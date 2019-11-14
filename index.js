@@ -102,7 +102,7 @@ function updateForm (user) {
   addressForm.innerHTML = ''
   alert('Please enter your address') // eslint-disable-line
   const formRow = createAndAppendElement('div', addressForm, null, 'form-row')
-  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-5 my-1')
+  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-9 my-1')
   createAndAppendElement('label', smallCol, null, 'sr-only', (element) => {
     element.setAttribute('for', 'inlineFormAddress')
     element.innerText = 'Address'

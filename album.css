@@ -2,7 +2,13 @@
   padding-top: 3rem;
   padding-bottom: 3rem;
   margin-bottom: 0;
-  background-color: #fff;
+  background-color: #A8D0E6;
+  /* font-family: 'M PLUS Rounded 1c', sans-serif; */
+  font-family: serif, "American Typewriter";
+  /* font-family: serif, "Palatino, URW Palladio L"; */
+  font-family: "sans-serif", Nunito;
+  font-variant: small-caps;
+  color: white;
 }
 @media (min-width: 768px) {
   .jumbotron {
@@ -11,7 +17,7 @@
   }
 }
 
-.jumbotron p:last-child {
+/* .jumbotron p:last-child {
   margin-bottom: 0;
 }
 
@@ -21,7 +27,7 @@
 
 .jumbotron .container {
   max-width: 40rem;
-}
+} */
 
 footer {
   padding-top: 3rem;
@@ -41,18 +47,16 @@ img {
 
 }
 
-.modal {
-  opacity: 0;
-  visibility: hidden;
-  transition: visibility 0s lineaer 0.1s, opacity 0.3s ease;
-
-  &.open {
-    visibility: visible;
-    opacity: 1;
-    transition-delay: 0s;
-  }
-}
-
 .wrapper {
   overflow-y:scroll;  
+}
+
+.bg-dark{
+  background-color: #24305e!important;
+}
+
+.btn-primary{
+  background-color: #f8e9a1;
+  border-color: #f8e9a1;
+  color: #24305e;
 }
