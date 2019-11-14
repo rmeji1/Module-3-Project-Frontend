@@ -1,6 +1,7 @@
 const columnDiv = document.querySelector('#main-row')
 const addressForm = document.querySelector('#address-form')
 const myVoteAnchor = document.querySelector('#my-votes-link')
+
 addressForm.addEventListener('submit', submitForm)
 function submitForm (event) {
   event.preventDefault()
@@ -262,7 +263,7 @@ function addRemoveVote (card, bill) {
   const footer = createAndAppendElement('div', card, null, 'card-footer')
   const footerRow = createAndAppendElement('div', footer, null, 'row w-100 mx-auto')
   const disagreeCol = createAndAppendElement('div', footerRow, null, 'col-12')
-  createAndAppendElement('div', disagreeCol, 'btn-vote-against', 'btn btn-danger btn-lg btn-block', (el) => { 
+  createAndAppendElement('div', disagreeCol, 'btn-vote-against', 'btn btn-danger btn-lg btn-block', (el) => {
     el.innerText = 'Remove my vote'
     el.dataset.vote = 'false'
     el.dataset.billId = bill.bill_id
@@ -276,7 +277,7 @@ function addAgreeButtons (card, bill) {
   const footer = createAndAppendElement('div', card, null, 'card-footer')
   const footerRow = createAndAppendElement('div', footer, null, 'row w-100')
   const agreeCol = createAndAppendElement('div', footerRow, null, 'col-6')
-  createAndAppendElement('div', agreeCol, 'btn-vote-for', 'btn btn-success btn-lg btn-block', (el) => { 
+  createAndAppendElement('div', agreeCol, 'btn-vote-for', 'btn btn-success btn-lg btn-block', (el) => {
     el.innerText = 'Agree'
     el.dataset.vote = 'true'
     el.dataset.billId = bill.bill_id
@@ -284,7 +285,7 @@ function addAgreeButtons (card, bill) {
     el.addEventListener('click', voteForBill)
   })
   const disagreeCol = createAndAppendElement('div', footerRow, null, 'col-6')
-  createAndAppendElement('div', disagreeCol, 'btn-vote-against', 'btn btn-danger btn-lg btn-block', (el) => { 
+  createAndAppendElement('div', disagreeCol, 'btn-vote-against', 'btn btn-danger btn-lg btn-block', (el) => {
     el.innerText = 'Disagree'
     el.dataset.vote = 'false'
     el.dataset.billId = bill.bill_id
@@ -295,7 +296,7 @@ function addAgreeButtons (card, bill) {
 
 function voteForBill (event) {
   const userId = columnDiv.dataset.userId
-  fetch(`http://localhost:3000/bills`, { //eslint-disable-line 
+  fetch(`http://localhost:3000/bills`, { //eslint-disable-line
     method: 'POST',
     headers: {
       'content-type': 'application/json',
