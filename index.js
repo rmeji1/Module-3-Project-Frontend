@@ -202,6 +202,7 @@ function renderMember (member, row) {
   })
   const buttonDiv = createAndAppendElement('div', cardBody, null, 'd-flex justify-content-between align-items-center')
   if (member.channels[1] !== undefined) {
+    socialIcons(cardBody, member)
   }
   createAndAppendElement('div', buttonDiv, `btn-group-${member.name.replace(/[." "]/g, '-')}`, 'btn-group')
   row.append(card)
@@ -244,27 +245,55 @@ function makeButton (member) {
 
 function socialIcons (cardBody, member) {
   createAndAppendElement('i', cardBody, null, 'fa fa-twitter', (el) => {
-    el.style = 'font-size: 20px;'
+  
     // check for what spcials and add the buttons
     el.dataset.twitter = member.channels[1].id
     el.addEventListener('click', (event) => {
-      window.location.href = `https://twitter.com/${event.target.dataset.twitter}?s=10`
+      createAndAppendElement('a', cardBody, null, "twitter-timeline", (el) => {
+        el.innerText = `Tweets by ${member.name}`
+      })
+      // <a class="twitter-timeline" href=`https://twitter.com/VP?ref_src=twsrc%5Etfw`>Tweets by VP</a> 
+      window.location.href = `https://twitter.com/${member.channels[1].id}?ref_src=twsrc%5Etfw`
     })
   })
 }
 
-function representativeModalElements (member) {
+function representativeModalElements(member) {
   const modalTitle = document.querySelector('#modal-title')
   modalTitle.innerText = member.name
   const tableBody = document.querySelector('#member-info')
   tableBody.innerHTML = ''
-  const tr = createAndAppendElement('tr', tableBody, null, null)
-  createAndAppendElement('td', tr, null, null, (el) => { el.innerText = member.phones[0] })
-  createAndAppendElement('td', tr, null, null, (el) => { el.innerText = member.party })
-  createAndAppendElement('td', tr, null, null, (el) => {
+  const tr1 = createAndAppendElement('tr', tableBody, null, null)
+  createAndAppendElement('td', tr1, null, null, (el) => { el.innerText = member.phones[0] })
+  createAndAppendElement('td', tr1, null, null, (el) => { el.innerText = member.party })
+  createAndAppendElement('td', tr1, null, null, (el) => {
     el.innerText = `${member.address[0].line1}, ${member.address[0].line2}, ${member.address[0].city}, ${member.address[0].state}, ${member.address[0].zip}`
   })
-  createAndAppendElement('td', tr, null, null, (el) => { el.innerText = member.urls[0] })
+  createAndAppendElement('td', tr1, null, null, (el) => { el.innerText = member.urls[0] })
+  const tr2 = createAndAppendElement('tr', tableBody, null, null)
+  const twitterDiv = document.querySelector('#twitter-div')
+  // createAndAppendElement('a', twitterDiv, null, "twitter-timeline", (el) => {
+  //   el.setAttribute('data-width', '500')
+  //   el.setAttribute('data-height', '200')
+  //   el.setAttribute('data-theme', 'light')
+  //   el.setAttribute('href', "https://twitter.com/VP?ref_src=twsrc%5Etfw")
+  // })
+  twitterDiv.innerHTML =
+    `<a class="twitter-timeline" data-width="500" data-tweet-limit="3" data-height="200" data-theme="light" href="https://twitter.com/${member.channels[1].id}">Tweets by VP</a>`
+    // twitterDiv.widgets.createTimeLine('VP')
+    // $('#twitter-div').html('<a class="twitter-timeline" data-width="500" data-height="200" data-theme="light" href="https://twitter.com/VP?ref_src=twsrc%5Etfw">Tweets by VP</a>')
+  $('#my-modal').on('shown.bs.modal', function () {
+    console.log('clicked')
+    !function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+      // if (!d.getElementById(id)) {
+        js = d.createElement(s);
+        js.id = id;
+        js.src = p + '://platform.twitter.com/widgets.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      // }
+    }(document, 'script', 'twitter-wjs');
+    });
 }
 
 function makeButtonForBills (member) {
