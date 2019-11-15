@@ -117,3 +117,12 @@ img {
 .mt-2.mb-4 {
   font-family: 'Montserrat', sans-serif;
 }
+
+.card-office {
+  padding-top: 20px;
+ 
+}
+
+#bootstrap-font-override h5 {
+  font-size: 90px;
+}
