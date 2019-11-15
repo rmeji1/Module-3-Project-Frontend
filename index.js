@@ -4,6 +4,7 @@ const myVoteAnchor = document.querySelector('#my-votes-link')
 const homeButton = document.querySelector('#home-button')
 
 addressForm.addEventListener('submit', submitForm)
+
 function submitForm (event) {
   event.preventDefault()
   // const addressValue = event.target.inlineFormAddress.value
@@ -17,7 +18,6 @@ function submitForm (event) {
     body: JSON.stringify({
       user: {
         username: username
-        // address: addressValue
       }
     })
   })
@@ -30,7 +30,118 @@ function submitForm (event) {
       } else {
         columnDiv.innerHTML = ''
         fetchRep(user.id, true)
+        disableInputArea()
+        // add code put username in label and add destory button to user
       }
+    })
+}
+
+function updateForm (user) {
+  addressForm.innerHTML = ''
+  // alert('Please enter your address') // eslint-disable-line
+  const formRow = createAndAppendElement('div', addressForm, null, 'form-row')
+  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-9 my-1')
+  formAddressComponents(smallCol, user, formRow)
+}
+
+function formAddressComponents (smallCol, user, formRow) {
+  createAndAppendElement('label', smallCol, null, 'sr-only', (element) => {
+    element.setAttribute('for', 'inlineFormAddress')
+    element.innerText = 'Address'
+  })
+  createAndAppendElement('input', smallCol, 'inlineFormAddress', 'form-control', (element) => {
+    element.dataset.id = user.id
+    element.placeholder = 'Address'
+  })
+  const buttonCol = createAndAppendElement('div', formRow, 'address-submit', 'col-sm-3 my-1')
+  createAndAppendElement('button', buttonCol, null, 'btn btn-primary', (element) => {
+    element.innerText = 'Add Address'
+  })
+  addressForm.removeEventListener('submit', submitForm)
+  addressForm.addEventListener('submit', updateFormEventListener)
+}
+
+function updateFormEventListener (event) {
+  event.preventDefault()
+  const id = event.target.inlineFormAddress.dataset.id
+  const address = event.target.inlineFormAddress.value
+  patchAddress(id, address).then(userObj => {
+    columnDiv.innerHTML = ''
+    fetchRep(userObj.id, true)
+    setupOrigianlFormDisabled(userObj, true)
+  })
+}
+
+function setupOrigianlFormDisabled (user, isDisabled) {
+  addressForm.innerHTML = ''
+  const formRow = createAndAppendElement('div', addressForm, null, 'form-row')
+  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-9 my-1')
+  formUserComponents(smallCol, user, formRow)
+  if (isDisabled) {
+    disableInputArea()
+  } else {
+    window.scrollTo(0, 0)
+    addressForm.removeEventListener('submit', removeUser)
+    addressForm.addEventListener('submit', submitForm)
+  }
+}
+
+function formUserComponents (smallCol, user, formRow) {
+  createAndAppendElement('label', smallCol, null, 'sr-only', (element) => {
+    element.setAttribute('for', 'inlineFormInputGroupUsername')
+    element.innerText = 'Username'
+  })
+  const inputGroup = createAndAppendElement('div', smallCol, null, 'input-group')
+  const inputGroupPrepend = createAndAppendElement('div', inputGroup, null, 'input-group-prepend')
+  createAndAppendElement('div', inputGroupPrepend, null, 'input-group-text', (el) => { el.innerText = '@' })
+  createAndAppendElement('input', inputGroup, 'inlineFormInputGroupUsername', 'form-control', (element) => {
+    if (user !== null) {
+      element.value = user.username
+      element.disabled = true
+    } else {
+      element.placeholder = 'Enter Username'
+      element.disabled = false
+    }
+  })
+  const buttonCol = createAndAppendElement('div', formRow, 'address-submit', 'col-sm-3 my-1')
+  createAndAppendElement('button', buttonCol, 'username-submit', 'btn btn-primary', (element) => {
+    element.innerText = 'Submit'
+  })
+  addressForm.removeEventListener('submit', updateFormEventListener)
+  addressForm.addEventListener('submit', submitForm)
+}
+
+function disableInputArea () {
+  let textInput = document.querySelector('#inlineFormInputGroupUsername')
+  let inputButton = document.querySelector('#username-submit')
+  if (textInput === null) {
+    textInput = document.querySelector('#inlineFormAddress')
+  }
+  if (inputButton === null) {
+    inputButton = document.querySelector('#address-submit')
+  }
+  textInput.disabled = true
+  inputButton.className = 'btn btn-danger'
+  inputButton.innerText = 'Delete!'
+  addressForm.removeEventListener('submit', submitForm)
+  addressForm.addEventListener('submit', removeUser)
+}
+
+function removeUser (event) {
+  event.preventDefault()
+  const id = columnDiv.dataset.userId
+  fetch(`http://localhost:3000/users/${id}`, { //eslint-disable-line 
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      Accept: 'application/json'
+    }
+  })
+    .then(response => response.json())
+    .then((success) => {
+      console.log('Show inital page!')
+      setupOrigianlFormDisabled(null, false)
+      while (columnDiv.firstChild) columnDiv.removeChild(columnDiv.firstChild)
     })
 }
 
@@ -42,7 +153,7 @@ function showMyVotesEvent (event) {
     .then((bills) => {
       while (columnDiv.firstChild) columnDiv.removeChild(columnDiv.firstChild)
       const row = createAndAppendElement('div', columnDiv, null, 'row')
-      const col = createAndAppendElement('div', row, null, 'col-sm-12 d-flex flex-column wrapper')
+      const col = createAndAppendElement('div', row, 'my-votes-col', 'col-sm-12 d-flex flex-column wrapper')
       for (const bill of bills) {
         appendBillToDom(bill, col)
       }
@@ -100,41 +211,6 @@ function renderMember (member, row) {
     card.id = `card-${member.proPublica_id}`
     makeButtonForBills(member)
   }
-}
-
-function updateForm (user) {
-  addressForm.innerHTML = ''
-  alert('Please enter your address') // eslint-disable-line
-  const formRow = createAndAppendElement('div', addressForm, null, 'form-row')
-  const smallCol = createAndAppendElement('div', formRow, null, 'col-sm-9 my-1')
-  formAddressComponents(smallCol, user, formRow)
-}
-
-function formAddressComponents (smallCol, user, formRow) {
-  createAndAppendElement('label', smallCol, null, 'sr-only', (element) => {
-    element.setAttribute('for', 'inlineFormAddress')
-    element.innerText = 'Address'
-  })
-  createAndAppendElement('input', smallCol, 'inlineFormAddress', 'form-control', (element) => {
-    element.dataset.id = user.id
-    element.placeholder = 'Address'
-  })
-  const buttonCol = createAndAppendElement('div', formRow, null, 'col-sm-3 my-1')
-  createAndAppendElement('button', buttonCol, null, 'btn btn-primary', (element) => {
-    element.innerText = 'Add Address'
-  })
-  addressForm.removeEventListener('submit', submitForm)
-  addressForm.addEventListener('submit', updateFormEventListener)
-}
-
-function updateFormEventListener (event) {
-  event.preventDefault()
-  const id = event.target.inlineFormAddress.dataset.id
-  const address = event.target.inlineFormAddress.value
-  patchAddress(id, address).then(userObj => {
-    columnDiv.innerHTML = ''
-    fetchRep(userObj.id, true)
-  })
 }
 
 function patchAddress (id, address) {
@@ -236,7 +312,7 @@ function appendBillsToDOM (bills, row) {
 }
 
 function appendBillToDom (bill, col) {
-  const card = createAndAppendElement('div', col, `card-${bill.bill_id}`, 'card flex-fill mb-4')
+  const card = createAndAppendElement('div', col, `card-${bill.bill_id}`, 'card flex-fill mb-4 shadow')
   createCardBody(card, bill)
 }
 
@@ -324,10 +400,15 @@ function removeMyVoteEvent (event) {
   })
     .then((r) => r.json())
     .then(bill => {
-      console.log(bill);
+      console.log('in remove my vote')
       const card = document.querySelector(`#card-${bill.bill_id}`)
-      card.innerHTML = ''
-      createCardBody(card, bill)
+      console.log(card.parentElement)
+      if (card.parentElement.id === 'my-votes-col') {
+        card.remove()
+      } else {
+        card.innerHTML = ''
+        createCardBody(card, bill)
+      }
     })
 }
 
