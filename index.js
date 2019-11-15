@@ -1,7 +1,10 @@
 const columnDiv = document.querySelector('#main-row')
+columnDiv.addEventListener('animationend', (event) => { spinner.classList.add('d-none') })
+
 const addressForm = document.querySelector('#address-form')
 const myVoteAnchor = document.querySelector('#my-votes-link')
 const homeButton = document.querySelector('#home-button')
+const spinner = document.querySelector('#spinner')
 
 addressForm.addEventListener('submit', submitForm)
 
@@ -164,6 +167,7 @@ function fetchRep (id, federal) {
   fetch(`http://localhost:3000/users/${id}?federal=${federal}`) //eslint-disable-line
     .then((response) => response.json())
     .then(function (members) {
+      spinner.classList.remove('d-none')
       console.log(members)
       while (columnDiv.firstChild) columnDiv.removeChild(columnDiv.firstChild)
       let row = createAndAppendElement('div', columnDiv, null, 'row w-100 mx-auto')
@@ -183,6 +187,7 @@ function renderMember (member, row) {
   card.className = 'col-md-4'
 
   const cardShadow = createAndAppendElement('div', card, null, 'card mb-4 shadow-sm animated bounceInRight faster')
+
   const cardBody = createAndAppendElement('div', cardShadow, null, 'card-body')
   createAndAppendElement('img', cardBody, null, 'container', (element) => {
     element.height = 400
@@ -286,6 +291,7 @@ function wantToSeeActiveBills (event) {
   button.removeEventListener('click', wantToSeeActiveBills)
   button.addEventListener('click', wantFederalReps)
   getBillsFor(button).then((bills) => {
+    spinner.classList.remove('d-none')
     appendBillsToDOM(bills, row)
     window.scrollTo(0, document.querySelector('.jumbotron').clientHeight)
   })
@@ -306,6 +312,7 @@ function wantFederalReps (event) {
 
 function appendBillsToDOM (bills, row) {
   const col = createAndAppendElement('div', row, null, 'col-sm-8 d-flex flex-column wrapper animated bounceInUp slow')
+  // col.addEventListener('animationend', (event) => { spinner.classList.add('d-none') })
   for (const bill of bills) {
     appendBillToDom(bill, col)
   }
