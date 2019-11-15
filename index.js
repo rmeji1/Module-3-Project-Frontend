@@ -279,7 +279,7 @@ function representativeModalElements(member) {
   //   el.setAttribute('href', "https://twitter.com/VP?ref_src=twsrc%5Etfw")
   // })
   twitterDiv.innerHTML =
-    `<a class="twitter-timeline" data-width="500" data-tweet-limit="3" data-height="200" data-theme="light" href="https://twitter.com/${member.channels[1].id}">Tweets by VP</a>`
+    `<a class="twitter-timeline" data-width="500" data-tweet-limit="3" data-height="200" data-theme="light" href="https://twitter.com/${member.channels[1].id}">Tweets by ${member.name}</a>`
     // twitterDiv.widgets.createTimeLine('VP')
     // $('#twitter-div').html('<a class="twitter-timeline" data-width="500" data-height="200" data-theme="light" href="https://twitter.com/VP?ref_src=twsrc%5Etfw">Tweets by VP</a>')
   $('#my-modal').on('shown.bs.modal', function () {
